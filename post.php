@@ -1,6 +1,33 @@
 <?php
+$message = '';
 if(isset($_POST['isPosted'])){
-
+  $title   = $_POST['title'];
+  $content = $_POST['content'];
+  
+  try{
+    $mongo = new Mongo();
+    $database = $mongo->selectDB('phpblog');
+    $collection = $database->selectCollection('articles');
+    
+    $article = array(
+      'title' => $title,
+      'content' => $content,
+      'saved_at' => new MongoDate()
+    );
+    
+    if($collection->insert($article, array('safe'=>True))){
+      $message = '<div class="s_err">Article successfully saved.(ID - '.$article['_id'].')</div>';
+    }
+    
+    //print_r($article);
+    
+  }catch(MongoConnectException $e){
+    die('Failed to connect to database '.$e->getMessage());
+  }catch(MongoException $e){
+    die('Failed to insert data '.$e->getMessage());
+  }
+  
+  
 }
 ?>
 <!DOCTYPE html>
@@ -15,7 +42,9 @@ if(isset($_POST['isPosted'])){
   <body>
   <div id="pageContainer">
     <div id="pageBody">
-    <form action="" class="dataform" method="">
+    <h1>Post a new article</h1>
+    <?php echo $message;?>
+    <form action="<?php echo $_SERVER['PHP_SELF'];?>" class="dataform" method="post">
       <label for="title">Title</label>
       <input type="text" name="title" id="title" />
       <label for="content">Content</label>

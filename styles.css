@@ -1,12 +1,14 @@
 *{
   margin: 0;
   padding: 0;
+  color: #004080;
 }
 
 body{
   background-color: #0080ff;
   font-size: 12px;
   font-family: Verdana, Arial, Helvetica, SunSans-Regular,Sans-Serif;
+  color: #004080;
 }
 
 div#pageContainer{
@@ -22,7 +24,7 @@ form.dataform{
 }
 
 form.dataform label{
-  color: #666666;
+  /*color: #666666;*/
   font-weight: bold;
   display: block;
   text-align: left;
@@ -40,13 +42,53 @@ form.dataform input[type="submit"]{
 
 form.dataform input[type="text"]{
   width: 80%;
-  border: 1px solid #808080;
+  border: 1px solid #00264d;
   padding: 5px;
 }
 
 form.dataform textarea{
   width: 80%;
-  border: 1px solid #808080;
+  border: 1px solid #00264d;
   padding: 5px;
   height: 200px;
+}
+
+div.s_ok{
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #008080;
+  background-color: #b3e6b3;
+  color: #004d4d;
+}
+
+div.s_err{
+  padding: 10px;
+  margin: 5px;
+  border: 1px solid #660000;
+  background-color: #ffb3b3;
+  color: #660000;
+}
+
+h1{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #003366;
+}
+
+h2{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+h3{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+div.blogpost{
+  margin-bottom: 20px;
+}
+
+div.blogpost p{
+  text-align: justify;
 }
