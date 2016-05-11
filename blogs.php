@@ -1,14 +1,22 @@
 <?php
 try{
-    $mongo = new Mongo();
-    $database = $mongo->selectDB('phpblog');
-    $collection = $database->selectCollection('articles');
+   $mongo = new Mongo();
+   $database = $mongo->selectDB('phpblog');
+   $collection = $database->selectCollection('articles');
     
 }catch(MongoConnectException $e){
    die('Failed to connect to database '.$e->getMessage());
 }
+$articlesPerPage = 5;
+$currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$skip = ($currentPage - 1) * $articlesPerPage;
+
 
 $cursor = $collection->find();
+$totalArticles = $cursor->count();
+$totalPages = (int)ceil($totalArticles / $articlesPerPage);
+
+$cursor->sort(array('saved_at' => -1))->skip($skip)->limit($articlesPerPage);
 ?>
 <!DOCTYPE html>
 <html>
@@ -34,6 +42,19 @@ $cursor = $collection->find();
     <?php
     }
     ?>
+    <div id="navigation">
+        <?php if($currentPage > 1){ ?>
+        <div class="previous">
+        <a href="<?php echo $_SERVER['PHP_SELF'].'?page='.($currentPage - 1); ?>">Newer Posts</a>
+        </div>
+        <?php } ?>
+        <?php if($totalPages > $currentPage) { ?>
+        <div class="next">
+        <a href="<?php echo $_SERVER['PHP_SELF'].'?page='.($currentPage + 1); ?>">Older Posts</a>
+        </div>
+        <?php } ?>
+    </div>
+    <br class="clear"/>
     </div>
   </div>
   </body>

@@ -16,7 +16,7 @@ if(isset($_POST['isPosted'])){
     );
     
     if($collection->insert($article, array('safe'=>True))){
-      $message = '<div class="s_err">Article successfully saved.(ID - '.$article['_id'].')</div>';
+      $message = '<div class="s_ok">Article successfully saved.(ID - '.$article['_id'].')</div>';
     }
     
     //print_r($article);
@@ -50,7 +50,7 @@ if(isset($_POST['isPosted'])){
       <label for="content">Content</label>
       <textarea name="content" id="content"></textarea>
       <input type="hidden" name="isPosted" value="true"/>
-      <input type="submit" name="submit" value="Save"/>
+      <input type="submit" class="button_normal" name="submit" value="Save"/>
     </form>
     </div>
   </div>
