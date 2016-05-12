@@ -1,24 +1,29 @@
 <?php
 $message = '';
-if(isset($_POST['isPosted'])){
-  $title   = $_POST['title'];
-  $content = $_POST['content'];
+$id = $_GET['id'];
   
   try{
     $mongo = new Mongo();
     $database = $mongo->selectDB('phpblog');
     $collection = $database->selectCollection('articles');
     
-    $article = array(
-      'title' => $title,
-      'content' => $content,
-      'saved_at' => new MongoDate()
-    );
-    
-    if($collection->insert($article, array('safe'=>True))){
-      $message = '<div class="s_ok">Article successfully saved.(ID - '.$article['_id'].')</div>';
+    if(isset($_POST['isPosted'])){
+      $title   = $_POST['title'];
+      $content = $_POST['content'];
+
+      $article = array(
+	'title' => $title,
+	'content' => $content,
+	'saved_at' => new MongoDate()
+      );
+      
+      if($collection->update(array('_id'=> new MongoId($id)), $article)){
+	$message = '<div class="s_ok">Article successfully updated.(ID - '.$id.')</div>';
+      }
     }
     
+    
+    $article = $collection->findOne(array('_id' => new MongoId($id)));
     //print_r($article);
     
   }catch(MongoConnectException $e){
@@ -26,7 +31,6 @@ if(isset($_POST['isPosted'])){
   }catch(MongoException $e){
     die('Failed to insert data '.$e->getMessage());
   } 
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -42,11 +46,11 @@ if(isset($_POST['isPosted'])){
     <div id="pageBody">
     <h1>Post a new article</h1>
     <?php echo $message;?>
-    <form action="<?php echo $_SERVER['PHP_SELF'];?>" class="dataform" method="post">
+    <form action="<?php echo $_SERVER['PHP_SELF'];?>?id=<?php echo $id; ?>" class="dataform" method="post">
       <label for="title">Title</label>
-      <input type="text" name="title" id="title" />
+      <input type="text" name="title" id="title" value="<?php echo $article['title'];?>" />
       <label for="content">Content</label>
-      <textarea name="content" id="content"></textarea>
+      <textarea name="content" id="content"><?php echo $article['content'];?></textarea>
       <input type="hidden" name="isPosted" value="true"/>
       <input type="submit" class="button_normal" name="submit" value="Save"/>
     </form>

@@ -8,6 +8,13 @@ try{
    die('Failed to connect to database '.$e->getMessage());
 }
 
+if(isset($_GET['delete'])){
+  $id = $_GET['delete'];
+  
+  $collection->remove(array('_id' => new MongoId($id)));
+  header('Location: list.php');
+}
+
 $cursor = $collection->find();
 $count = $cursor->count();
 
@@ -23,6 +30,7 @@ $count = $cursor->count();
       function gotoURL(url){
 	window.document.location = url;
       }
+      
     </script>
   </head>
   
@@ -49,8 +57,8 @@ $count = $cursor->count();
 	<td><?php echo date('g:i a, F j',$article['saved_at']->sec);?></td>
 	<td>
 	<input type="button" class="button_normal" name="submit" onclick="gotoURL('blog.php?id=<?php echo $article['_id']; ?>')" value="View"/>
-	<input type="button" class="button_normal" name="submit" onclick="gotoURL('')" value="Edit"/>
-	<input type="button" class="button_danger" name="submit" onclick="gotoURL('')" value="Delete"/>
+	<input type="button" class="button_normal" name="submit" onclick="gotoURL('edit.php?id=<?php echo $article['_id']; ?>')" value="Edit"/>
+	<a href="<?php echo $_SERVER['PHP_SELF']; ?>?delete=<?php echo $article['_id']; ?>"><input type="button" class="button_danger" name="submit" onclick="return confirm('Are you sure?')" value="Delete"/></a>
 	</td>
       </tr>
       <?php
