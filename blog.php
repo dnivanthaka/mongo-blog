@@ -1,8 +1,12 @@
 <?php
+require_once('DBHandling.php');
+
 try{
-   $mongo = new Mongo();
-   $database = $mongo->selectDB('phpblog');
-   $collection = $database->selectCollection('articles');
+   //$mongo = new Mongo();
+   //$database = $mongo->selectDB('phpblog');
+   //$collection = $database->selectCollection('articles');
+   $database = DBHandling::getInstance();
+   $collection = $database->getCollection('articles');
     
 }catch(MongoConnectException $e){
    die('Failed to connect to database '.$e->getMessage());

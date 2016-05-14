@@ -1,11 +1,15 @@
 <?php
+require_once('DBHandling.php');
+
 $message = '';
 $id = $_GET['id'];
   
   try{
-    $mongo = new Mongo();
-    $database = $mongo->selectDB('phpblog');
-    $collection = $database->selectCollection('articles');
+    //$mongo = new Mongo();
+    //$database = $mongo->selectDB('phpblog');
+    //$collection = $database->selectCollection('articles');
+    $database = DBHandling::getInstance();
+    $collection = $database->getCollection('articles');
     
     if(isset($_POST['isPosted'])){
       $title   = $_POST['title'];
